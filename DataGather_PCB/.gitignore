@@ -1,0 +1,11 @@
+build/
+mx.scratch
+
+# macOS
+.DS_Store
+
+# STM32CubeMX local metadata
+.mxproject
+
+# IDE bundle tracking (machine-specific)
+.settings/

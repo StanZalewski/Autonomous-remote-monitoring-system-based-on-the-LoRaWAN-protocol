@@ -1,0 +1,8 @@
+# KiCad auto-backups
+*-backups/
+
+# KiCad footprint cache (auto-generated)
+fp-info-cache
+
+# macOS
+.DS_Store
