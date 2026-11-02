@@ -74,14 +74,14 @@ HAL_StatusTypeDef GenSysInfo(void)
     
     g_system_data.gen_sys_status = 0;
     
-    // Bit 0: CHG FET Status (DCHG pin on PA5, active-LOW polarity)
-    // Pin HIGH = CHG FET ON
+    // Bit 0: CHG FET Status (DCHG pin on PA5)
+    // DCHG is an active-low "disable charge" output, so pin HIGH = CHG FET ON
     if (HAL_GPIO_ReadPin(DCHG_GPIO_Port, DCHG_Pin) == GPIO_PIN_SET) {
         g_system_data.gen_sys_status |= (1 << 0);
     }
     
-    // Bit 1: DSG FET Status (DDSG pin on PA4, active-LOW polarity)
-    // Pin HIGH = DSG FET ON
+    // Bit 1: DSG FET Status (DDSG pin on PA4)
+    // DDSG is an active-low "disable discharge" output, so pin HIGH = DSG FET ON
     if (HAL_GPIO_ReadPin(DDSG_GPIO_Port, DDSG_Pin) == GPIO_PIN_SET) {
         g_system_data.gen_sys_status |= (1 << 1);
     }
@@ -100,7 +100,7 @@ HAL_StatusTypeDef GenSysInfo(void)
     }
     
     // Bit 4: Watchdog Status (from charger_status_0, bit 5)
-    // Bit 5 of charger_status_0 is typically WD_STAT or similar
+    // Bit 5 of charger_status_0 (REG0x1B) is WD_STAT
     // Copy bit 5 to bit 4 of gen_sys_status
     if (g_charger_status.charger_status_0 & (1 << 5)) {
         g_system_data.gen_sys_status |= (1 << 4);

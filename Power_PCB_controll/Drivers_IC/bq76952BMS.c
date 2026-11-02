@@ -162,63 +162,63 @@ HAL_StatusTypeDef BQ76952_InitProtectionSettings(I2C_HandleTypeDef *hi2c)
     HAL_StatusTypeDef status;
     uint8_t data[1];
     
-    // ✅ CORRECTED: Enabled Protections A
+    //Enabled Protections A
     // Bit layout: SCD OCD2 OCD1 OCC COV CUV RSVD RSVD
     // Enable all 6: 1111 1100 = 0xFC
     data[0] = 0xFC;
     status = BQ76952_WriteRAM(hi2c, 0x9261, data, 1);
     if (status != HAL_OK) return status;
     
-    // ✅ CORRECTED: Enabled Protections B
+    //Enabled Protections B
     // Bit layout: OTF OTINT OTD OTC RSVD UTINT UTD UTC
     // Enable all 7: 1111 0111 = 0xF7
     data[0] = 0xF7;
     status = BQ76952_WriteRAM(hi2c, 0x9262, data, 1);
     if (status != HAL_OK) return status;
     
-    // ✅ CORRECTED: Enabled Protections C
+    //Enabled Protections C
     // Bit layout: OCD3 SCDL OCDL COVL RSVD PTO HWDF RSVD
     // Enable OCD3 and HWDF: 1000 0010 = 0x82
     data[0] = 0x82;
     status = BQ76952_WriteRAM(hi2c, 0x9263, data, 1);
     if (status != HAL_OK) return status;
     
-    // ✅ CORRECTED: CHG FET Protections A
+    //CHG FET Protections A
     // Bit layout: SCD RSVD RSVD OCC COV RSVD RSVD RSVD
     // Enable SCD, OCC, COV: 1001 1000 = 0x98
     data[0] = 0x98;
     status = BQ76952_WriteRAM(hi2c, 0x9265, data, 1);
     if (status != HAL_OK) return status;
     
-    // ✅ CORRECTED: CHG FET Protections B
+    //CHG FET Protections B
     // Bit layout: OTF OTINT RSVD OTC RSVD UTINT RSVD UTC
     // Enable all: 1101 0101 = 0xD5
     data[0] = 0xD5;
     status = BQ76952_WriteRAM(hi2c, 0x9266, data, 1);
     if (status != HAL_OK) return status;
     
-    // ✅ CORRECTED: CHG FET Protections C
+    //CHG FET Protections C
     // Bit layout: RSVD SCDL RSVD COVL RSVD PTO HWDF RSVD
     // Enable SCDL, COVL, PTO, HWDF: 0101 0110 = 0x56
     data[0] = 0x56;
     status = BQ76952_WriteRAM(hi2c, 0x9267, data, 1);
     if (status != HAL_OK) return status;
     
-    // ✅ CORRECTED: DSG FET Protections A
+    //DSG FET Protections A
     // Bit layout: SCD OCD2 OCD1 RSVD RSVD CUV RSVD RSVD
     // Enable SCD, OCD2, OCD1, CUV: 1110 0100 = 0xE4
     data[0] = 0xE4;
     status = BQ76952_WriteRAM(hi2c, 0x9269, data, 1);
     if (status != HAL_OK) return status;
     
-    // ✅ CORRECTED: DSG FET Protections B
+    //DSG FET Protections B
     // Bit layout: OTF OTINT OTD RSVD RSVD UTINT UTD RSVD
     // Enable all: 1110 0110 = 0xE6
     data[0] = 0xE6;
     status = BQ76952_WriteRAM(hi2c, 0x926A, data, 1);
     if (status != HAL_OK) return status;
     
-    // ✅ CORRECTED: DSG FET Protections C
+    //DSG FET Protections C
     // Bit layout: OCD3 SCDL OCDL RSVD RSVD RSVD HWDF RSVD
     // Enable OCD3, SCDL, OCDL, HWDF: 1110 0010 = 0xE2
     data[0] = 0xE2;
@@ -240,7 +240,7 @@ HAL_StatusTypeDef BQ76952_InitProtectionValues(I2C_HandleTypeDef *hi2c)
     status = BQ76952_WriteRAM(hi2c, 0x9275, data, 1);
     if (status != HAL_OK) return status;
     
-    // CUV Delay: 500ms - CORRECTED from 1360ms!
+    // CUV Delay: 500ms
     data[0] = 0x95; data[1] = 0x00;  // 149 → 497ms
     status = BQ76952_WriteRAM(hi2c, 0x9276, data, 2);
     if (status != HAL_OK) return status;
@@ -255,7 +255,7 @@ HAL_StatusTypeDef BQ76952_InitProtectionValues(I2C_HandleTypeDef *hi2c)
     status = BQ76952_WriteRAM(hi2c, 0x9278, data, 1);
     if (status != HAL_OK) return status;
     
-    // COV Delay: 200ms - CORRECTED from 1360ms!
+    // COV Delay: 200ms
     data[0] = 0x3A; data[1] = 0x00;  // 58 → 198ms
     status = BQ76952_WriteRAM(hi2c, 0x9279, data, 2);
     if (status != HAL_OK) return status;
@@ -267,8 +267,8 @@ HAL_StatusTypeDef BQ76952_InitProtectionValues(I2C_HandleTypeDef *hi2c)
     
     // ========== CHARGE CURRENT PROTECTION ==========
     
-    // OCC Threshold: 4A @ 1mΩ (MINIMUM - cannot set to 1.5A due to hardware)
-    // Your 1.5A charger limits current, this catches charger failures
+    // OCC Threshold: 4A @ 1mΩ (lowest setting with this shunt)
+    // The charger limits current to 1.3A; this catches charger failures
     data[0] = 2;  // 2 × 2mV = 4mV = 4A @ 1mΩ
     status = BQ76952_WriteRAM(hi2c, 0x9280, data, 1);
     if (status != HAL_OK) return status;
@@ -290,7 +290,7 @@ HAL_StatusTypeDef BQ76952_InitProtectionValues(I2C_HandleTypeDef *hi2c)
     status = BQ76952_WriteRAM(hi2c, 0x9282, data, 1);
     if (status != HAL_OK) return status;
     
-    // OCD1 Delay: 300ms - CORRECTED (was impossible 1000ms!)
+    // OCD1 Delay: 300ms
     data[0] = 0x59;  // 89 → 300ms (allows 10A/5s peaks)
     status = BQ76952_WriteRAM(hi2c, 0x9283, data, 1);
     if (status != HAL_OK) return status;
@@ -305,12 +305,12 @@ HAL_StatusTypeDef BQ76952_InitProtectionValues(I2C_HandleTypeDef *hi2c)
     status = BQ76952_WriteRAM(hi2c, 0x9285, data, 1);
     if (status != HAL_OK) return status;
     
-    // SCD Threshold: 60mV = 60A @ 1mΩ - CORRECTED from encoding error!
-    data[0] = 0x03;  // 3 = 60mV (was also 3, which was actually correct)
+    // SCD Threshold: 60mV = 60A @ 1mΩ
+    data[0] = 0x03;  // 3 = 60mV
     status = BQ76952_WriteRAM(hi2c, 0x9286, data, 1);
     if (status != HAL_OK) return status;
     
-    // SCD Delay: 30µs - CORRECTED from 75µs!
+    // SCD Delay: 30µs
     data[0] = 0x03;  // 3 → (3-1)×15 = 30µs
     status = BQ76952_WriteRAM(hi2c, 0x9287, data, 1);
     if (status != HAL_OK) return status;
@@ -434,7 +434,7 @@ HAL_StatusTypeDef BQ76952_InitFETAndPins(I2C_HandleTypeDef *hi2c)
     HAL_StatusTypeDef status;
     uint8_t data[1];
     
-    // FET Options: Series mode, CHG OFF in sleep, host control, FETs on at init
+    // FET Options: Series mode, CHG OFF in sleep, host control, FETs off at init (host turns them on)
     data[0] = 0x2D;
     status = BQ76952_WriteRAM(hi2c, 0x9308, data, 1);
     if (status != HAL_OK) return status;

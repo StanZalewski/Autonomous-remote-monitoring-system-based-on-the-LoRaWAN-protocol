@@ -25,7 +25,7 @@ HAL_StatusTypeDef VEML7700_ReadALS(I2C_HandleTypeDef *hi2c, uint16_t *als_counts
     HAL_StatusTypeDef status;
     uint8_t data[2];
     
-    // Read 2 bytes from ALS register (simpler!)
+    // Read 2 bytes from ALS register
     status = HAL_I2C_Mem_Read(hi2c, (VEML7700_I2C_ADDR << 1), VEML7700_REG_ALS_DATA, I2C_MEMADD_SIZE_8BIT, data, 2, HAL_MAX_DELAY);
     if (status != HAL_OK) {
         return status;
@@ -46,7 +46,7 @@ HAL_StatusTypeDef VEML7700_ReadWHITE(I2C_HandleTypeDef *hi2c, uint16_t *white_co
     HAL_StatusTypeDef status;
     uint8_t data[2];
     
-    // Read 2 bytes from WHITE register (simpler!)
+    // Read 2 bytes from WHITE register
     status = HAL_I2C_Mem_Read(hi2c, (VEML7700_I2C_ADDR << 1), VEML7700_REG_WHITE_DATA, I2C_MEMADD_SIZE_8BIT, data, 2, HAL_MAX_DELAY);
     
     if (status != HAL_OK) {

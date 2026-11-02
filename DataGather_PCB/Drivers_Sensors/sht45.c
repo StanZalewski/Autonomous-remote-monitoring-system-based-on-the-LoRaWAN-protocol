@@ -2,7 +2,7 @@
 #include "stm32g0xx_hal_i2c.h"
 
 #define SHT45_I2C_ADDR   (0x44 << 1)
-/* High precision measurement command (no heater) */
+/* Medium precision measurement command (no heater) */
 #define SHT45_CMD_MEASURE_MEDIUMPRECISION  0xF6
 
 HAL_StatusTypeDef SHT45_ReadTempRH(I2C_HandleTypeDef *hi2c, float *temperature_degC, float *humidity_pRH){
