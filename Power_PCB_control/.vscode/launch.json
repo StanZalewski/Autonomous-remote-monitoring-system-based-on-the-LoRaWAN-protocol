@@ -6,7 +6,7 @@
     "configurations": [
         {
             "cwd": "${workspaceFolder}",
-            "executable": "${workspaceFolder}/build/Debug/Power_PCB_controll.elf",
+            "executable": "${workspaceFolder}/build/Debug/Power_PCB_control.elf",
             "name": "Debug with ST-Link",
             "request": "launch",
             "type": "cortex-debug",
